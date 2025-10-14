@@ -3,128 +3,265 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Concept Porcelain | Churrasqueiras, Fornos, Fogões a Lenha e Revestimentos em Bauru e Região</title>
-  <meta name="description" content="Projetos sob medida em alvenaria, tijolo refratário e porcelanato: churrasqueiras, fornos, fogões a lenha, dutos e chaminés. Atendimento em Bauru e região." />
- <header style="text-align:center; background-color:#0f0f10; padding:15px 0;">
-  <img src="logo.png" alt="Concept Porcelain Mestre Azulejista"
-       style="height:80px; width:auto; display:block; margin:0 auto;">
-</header>
-  <meta property="og:description" content="Churrasqueiras, Fornos, Fogões a Lenha e Revestimentos. Atendimento em Bauru e região." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://dummyimage.com/1200x630/222/fff.png&text=Concept+Porcelain" />
-  <meta name="theme-color" content="#c57b39" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <title>Concept Porcelain | Mestre Azulejista em Bauru</title>
+  <meta name="description" content="Churrasqueiras, fornos e fogões a lenha com acabamento premium em porcelanato, cerâmica, tijolinho, cimento queimado e pedras decorativas. Atendimento em Bauru e região.">
+  <link rel="canonical" href="https://nodaribeatriz-2025bb.github.io/conceptporcelain/" />
+
+  <!-- Favicon / App Icons (usando logo.png) -->
+  <link rel="icon" type="image/png" href="logo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="logo.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="logo.png">
+  <meta name="theme-color" content="#0f0f10" />
+
+  <!-- Open Graph / WhatsApp / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Concept Porcelain">
+  <meta property="og:title" content="Concept Porcelain | Mestre Azulejista em Bauru">
+  <meta property="og:description" content="Churrasqueiras, fornos e fogões a lenha com acabamento premium em porcelanato e pedras. 20 anos realizando sonhos em Bauru e região.">
+  <meta property="og:url" content="https://nodaribeatriz-2025bb.github.io/conceptporcelain/">
+  <meta property="og:image" content="https://nodaribeatriz-2025bb.github.io/conceptporcelain/logo.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Concept Porcelain | Mestre Azulejista em Bauru">
+  <meta name="twitter:description" content="Churrasqueiras, fornos e fogões a lenha com acabamento premium em porcelanato e pedras. 20 anos realizando sonhos em Bauru e região.">
+  <meta name="twitter:image" content="https://nodaribeatriz-2025bb.github.io/conceptporcelain/logo.png">
+
   <style>
-    body{margin:0;font-family:Inter,system-ui;background:#0f0f10;color:#f7f7f7}
-    a{text-decoration:none;color:inherit}
-    header{background:#0f0f10;padding:12px 0;position:sticky;top:0;z-index:10;border-bottom:1px solid #ffffff1a}
-    .container{width:min(1120px,92%);margin:auto}
-    .nav{display:flex;justify-content:space-between;align-items:center}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800;color:#f7f7f7}
-    .menu{display:flex;gap:18px}
-    .menu a{color:#bbb;font-size:20px}
-    .menu a:hover{color:#fff}
-    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;padding:40px 0}
-    .hero img{width:100%;border-radius:12px;border:1px solid #ffffff1a}
-    h1{font-size:clamp(28px,4.6vw,54px);margin:10px 0}
-    p{line-height:1.6}
-    .lead{color:#bbb;font-size:18px}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:12px;border:1px solid #ffffff1a;background:linear-gradient(180deg,#1a1a1f,#131317);font-weight:600}
-    .btn.primary{background:linear-gradient(180deg,#f0c58a,#c57b39);color:#1a1a1a}
-    section{padding:36px 0}
-    h3{font-size:26px;margin-bottom:12px}
-    .grid{display:grid;gap:16px}
-    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
-    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
-    @media(max-width:900px){.hero{grid-template-columns:1fr}.grid.cols-3,.grid.cols-2{grid-template-columns:1fr}}
-    .card{background:linear-gradient(180deg,#1a1a1f,#111115);border:1px solid #ffffff1a;border-radius:18px;padding:18px}
-    .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
-    .gallery img{width:100%;border-radius:10px;border:1px solid #ffffff1a}
-    footer{padding:20px 0 40px;color:#bbb;border-top:1px solid #ffffff1a;text-align:center}
+    :root{
+      --bg:#0f0f10;
+      --card:#151518;
+      --text:#f5f7f9;
+      --muted:#cfd3d7;
+      --gold:#d4af37; /* dourado do logo */
+      --wa:#009739;   /* verde WhatsApp */
+      --ig:#1877F2;   /* azul instagram */
+      --radius:14px;
+      --container:1180px;
+      --shadow:0 10px 24px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;}
+
+    /* ======= HEADER FIXO ======= */
+    header.site{
+      position:sticky; top:0; z-index:1000;
+      backdrop-filter: blur(6px);
+      background:rgba(15,15,16,.9);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .wrap{max-width:var(--container);margin:0 auto;padding:0 20px;}
+    .row{display:flex;align-items:center;gap:24px;}
+    .brand img{height:2cm; width:auto; display:block;}
+    nav ul{list-style:none;margin:0;padding:0;display:flex;gap:22px;flex-wrap:wrap;}
+    nav a{
+      color:var(--gold); text-decoration:none; font-weight:700; font-size:14px;
+      padding:12px 8px; display:inline-block;
+    }
+    nav a:hover{opacity:.9; text-decoration:underline}
+    .spacer{height:18px}
+
+    /* ======= HERO 2 COLUNAS ======= */
+    section.hero{padding:36px 0}
+    .cols{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center}
+    .hero h1{font-size:28px;margin:0 0 6px}
+    .hero p{margin:0;color:var(--muted)}
+    .hero img{width:100%;height:auto;border-radius:var(--radius);box-shadow:var(--shadow)}
+
+    /* bloco “sobre” + botões */
+    .about{margin-top:1cm}
+    .about p{margin:0 0 18px;max-width:900px}
+    .btns{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{
+      display:inline-block;border-radius:10px;padding:14px 22px;font-weight:700;text-decoration:none;
+      color:#fff; box-shadow:var(--shadow); transition:.2s transform ease, .2s filter ease;
+    }
+    .btn:hover{transform:translateY(-1px); filter:brightness(1.05)}
+    .btn.wa{background:var(--wa)}
+    .btn.ig{background:var(--ig)}
+
+    /* ======= TÍTULOS DE SEÇÃO ======= */
+    .section-title{
+      text-align:center; color:var(--gold); font-size:16px; font-weight:800; letter-spacing:.4px;
+      margin:44px 0 10px;
+    }
+
+    /* ======= SERVIÇOS (3 colunas) ======= */
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
+    .card{
+      background:var(--card); border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius); padding:18px; box-shadow:var(--shadow);
+    }
+    .card h4{margin:2px 0 8px; font-size:18px}
+    .card p{margin:0;color:var(--muted)}
+
+    /* ======= COMO TRABALHO ======= */
+    .how{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent); padding:10px 0 0}
+    .how ol{margin:14px auto 0; max-width:920px; padding-left:22px}
+    .how li{margin-bottom:12px; line-height:1.6}
+
+    /* ======= GALERIA ======= */
+    .gallery{
+      display:grid; gap:12px; margin-top:14px;
+      grid-template-columns:repeat(4,1fr);
+    }
+    .gallery img{
+      width:100%; height:100%; object-fit:cover; aspect-ratio: 3 / 2;
+      border-radius:12px; border:1px solid rgba(255,255,255,.06); box-shadow:var(--shadow);
+    }
+
+    /* ======= CONTATO ======= */
+    .contact .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px}
+    .contact p{margin:6px 0;color:var(--muted)}
+    .highlight{color:var(--gold); font-weight:800; text-align:center; margin:30px 0 6px}
+
+    /* ======= RODAPÉ ======= */
+    footer{margin:26px 0 40px; text-align:center; color:#bfc4c9; font-size:14px}
+
+    /* ======= RESPONSIVO ======= */
+    @media (max-width:980px){
+      .cols{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+      .brand img{height:1.6cm}
+      nav{margin-left:auto}
+    }
+    @media (max-width:560px){
+      nav ul{justify-content:center}
+      .gallery{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
-<header>
-  <div class="container nav">
-   <div class="logo" style="display:flex;justify-content:center;align-items:center;flex-direction:column;padding:30px 0;">
-  <img src="Logotipo Concept Porcelain (2).png" alt="Concept Porcelain Mestre Azulejista" style="width:280px;height:auto;">
-</div>
-    <nav class="menu">
-      <a href="#servicos">Serviços</a>
-      <a href="#como-faco">Como trabalho</a>
-      <a href="#galeria">Galeria</a>
-      <a href="#contato">Contato</a>
-    </nav>
-  </div>
-</header>
-<main class="container">
-  <section class="hero">
-    <div>
-      <h1>Churrasqueiras, Fornos e Fogões a Lenha<br>com acabamento em cerâmica, tijolinho e pedras decorativas.</h1>
-      <p class="lead">Sou <strong>Júlio César</strong>, mestre azulejista da <strong>Concept Porcelain</strong>. Construo e revisto áreas gourmet sob medida com alvenaria, porcelanato e tijolo refratário. Atendimento em Bauru e região.</p>
-<header style="text-align:center; background-color:#0f0f10; padding:30px 0;">
-  <img src="logo.png" alt="Concept Porcelain Mestre Azulejista"
-       style="height:160px; width:auto; display:block; margin:0 auto;">
-</header>
-      <a class="btn" href="https://instagram.com/jcesarf1978" target="_blank">📸 Ver Projetos no Instagram</a>
-    </div>
-  <header style="background-color:#0f0f10;text-align:center;padding:16px 0;">
-  <img src="logo.png" alt="Concept Porcelain" style="width:280px;height:auto;">
-</header>
-  </section>
-  <section id="servicos">
-    <h3>Serviços</h3>
-    <div class="grid cols-3">
-      <div class="card"><strong>Churrasqueiras</strong><p class="lead">Modelos tradicionais, parrilla ou bafo com dutos e chaminés bem dimensionados.</p></div>
-      <div class="card"><strong>Fornos & Fogões a Lenha</strong><p class="lead">Construídos com tijolo refratário e acabamentos premium em porcelanato ou pedra.</p></div>
-      <div class="card"><strong>Azulejista e Pedras Decorativas</strong><p class="lead">Revestimentos sob medida em porcelanato, tijolinho e bancadas em granito ou mármore.</p></div>
-    </div>
-  </section>
-  <section id="como-faco">
-    <h3>Como trabalho</h3>
-    <div class="grid cols-2">
-      <div class="card">
-        <ol class="lead">
-          <li><strong>1. Avaliação do Espaço:</strong> O cliente envia fotos e medidas do local.</li>
-          <br>
-          <li><strong>2. Definição do Projeto:</strong> Escolhemos juntos o modelo e acabamento (porcelanato, pedra, tijolinho).</li>
-          <br>
-          <li><strong>3. Orçamento:</strong> Entrego valores detalhados e prazo estimado de execução.</li>
-          <br>
-          <li><strong>4. Execução:</strong> Monto toda a estrutura com segurança, precisão e acabamento de alto padrão.</li>
-          <br>
-          <li><strong>5. Entrega Final:</strong> Revisão com o cliente e orientações de manutenção.</li>
-          <br>
-        </ol>
+
+  <!-- HEADER FIXO -->
+  <header class="site">
+    <div class="wrap">
+      <div class="row" style="justify-content:space-between;">
+        <a class="brand" href="#top" aria-label="Concept Porcelain">
+          <img src="logo.png" alt="Concept Porcelain - Mestre Azulejista">
+        </a>
+        <nav aria-label="Menu principal">
+          <ul>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#como-trabalho">Como trabalho</a></li>
+            <li><a href="#galeria">Galeria</a></li>
+            <li><a href="#contato">Contato</a></li>
+          </ul>
+        </nav>
       </div>
-      <div class="card"><img src="projeto1.png" alt="Execução do projeto"></div>
+    </div>
+  </header>
+  <div class="spacer"></div>
+
+  <!-- HERO -->
+  <section id="top" class="hero">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <h1>Churrasqueiras, Fornos e Fogões a Lenha</h1>
+          <p>com acabamento em cerâmica, tijolinho, cimento queimado ou pedras decorativas.</p>
+
+          <div class="about">
+            <p><strong>Sou Júlio César</strong>, mestre azulejista da Concept Porcelain, com 20 anos de experiência em serviços de alto padrão. Construo e revisto áreas gourmet sob medida com alvenaria, porcelanato e tijolo refratário. <strong>Atendimento em Bauru e região.</strong></p>
+
+            <div class="btns">
+              <a class="btn wa" href="https://wa.me/5514998605741?text=Oi%20J%C3%BAlio%2C%20quero%20um%20or%C3%A7amento"
+                 target="_blank" rel="noopener">💬 Pedir Orçamento no WhatsApp</a>
+              <a class="btn ig" href="https://instagram.com/jcesarf1978" target="_blank" rel="noopener">📸 Ver Projetos no Instagram</a>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <img src="projeto1.png" alt="Projeto Concept Porcelain">
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos">
+    <div class="wrap">
+      <h2 class="section-title">Serviços</h2>
+
+      <div class="cards">
+        <article class="card">
+          <h4>Churrasqueiras</h4>
+          <p>Modelos tradicionais, parrilla ou bafo com dutos e chaminés bem dimensionados.</p>
+        </article>
+
+        <article class="card">
+          <h4>Fornos &amp; Fogões a Lenha</h4>
+          <p>Construídos com tijolo refratário e acabamentos premium em porcelanato ou pedra.</p>
+        </article>
+
+        <article class="card">
+          <h4>Azulejista e Pedras Decorativas</h4>
+          <p>Revestimentos sob medida em porcelanato, tijolinho e bancadas em granito ou mármore.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO TRABALHO -->
+  <section id="como-trabalho" class="how">
+    <div class="wrap">
+      <h2 class="section-title">Como trabalho</h2>
+      <ol>
+        <li><strong>Avaliação do Espaço:</strong> O cliente envia fotos e medidas do local.</li>
+        <li><strong>Definição do Projeto:</strong> Escolhemos juntos o modelo e acabamento (porcelanato, pedra, tijolinho).</li>
+        <li><strong>Orçamento:</strong> Entrego valores detalhados e prazo estimado de execução.</li>
+        <li><strong>Execução:</strong> Monto toda a estrutura com segurança, precisão e acabamento de alto padrão.</li>
+        <li><strong>Entrega Final:</strong> Revisão com o cliente e orientações de manutenção.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- GALERIA -->
   <section id="galeria">
-    <h3>Galeria</h3>
-   <div class="gallery">
-  <img src="galeria1.png" alt="Projeto 1">
-  <img src="galeria2.png" alt="Projeto 2">
-  <img src="galeria3.png" alt="Projeto 3">
-  <img src="galeria4.png" alt="Projeto 4">
-  <img src="galeria5.png" alt="Projeto 5">
-  <img src="galeria6.png" alt="Projeto 6">
-  <img src="galeria7.png" alt="Projeto 7">
-  <img src="galeria8.png" alt="Projeto 8">
-</div>
-  </section>
-  <section id="contato">
-    <h3>Contato</h3>
-    <div class="card">
-      <p class="lead">Fale comigo no WhatsApp para solicitar um orçamento gratuito.</p>
-      <a class="btn primary" href="https://wa.me/5514998605741?text=Oi%20J%C3%BAlio%2C%20quero%20um%20or%C3%A7amento" target="_blank">💬 Enviar mensagem</a>
-      <p style="margin-top:8px">📍 Atendimento em Bauru e região<br>📞 (14) 99860-5741<br>📸 <a href="https://instagram.com/jcesarf1978" target="_blank">@jcesarf1978</a></p>
+    <div class="wrap">
+      <h2 class="section-title">Galeria</h2>
+      <div class="gallery">
+        <img src="galeria1.png"  alt="Projeto 1">
+        <img src="galeria2.png"  alt="Projeto 2">
+        <img src="galeria3.png"  alt="Projeto 3">
+        <img src="galeria4.png"  alt="Projeto 4">
+        <img src="galeria5.png"  alt="Projeto 5">
+        <img src="galeria6.png"  alt="Projeto 6">
+        <img src="galeria7.png"  alt="Projeto 7">
+        <img src="galeria8.png"  alt="Projeto 8">
+        <img src="galeria9.png"  alt="Projeto 9">
+        <img src="galeria10.png" alt="Projeto 10">
+      </div>
     </div>
   </section>
-</main>
-<footer>
-  © <span id="y"></span> Concept Porcelain • Mestre Azulejista — Bauru e Região
-</footer>
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+
+  <!-- CONTATO -->
+  <section id="contato" class="contact">
+    <div class="wrap">
+      <h2 class="section-title">Contato</h2>
+      <p>Fale comigo no WhatsApp para solicitar um orçamento gratuito.</p>
+
+      <div class="cta">
+        <a class="btn wa" href="https://wa.me/5514998605741?text=Oi%20J%C3%BAlio%2C%20quero%20um%20or%C3%A7amento"
+           target="_blank" rel="noopener">💬 quero um orçamento</a>
+        <a class="btn ig" href="https://instagram.com/jcesarf1978" target="_blank" rel="noopener">📸 @jcesarf1978</a>
+      </div>
+
+      <p>📍 Atendimento em Bauru e região</p>
+      <p>📞 (14) 99860-5741</p>
+
+      <p class="highlight">Concept Porcelain há 20 anos realizando sonhos!!</p>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Concept Porcelain • Mestre Azulejista — Acabamentos de Alto Padrão — Bauru e Região
+  </footer>
 </body>
 </html>
+
