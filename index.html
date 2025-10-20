@@ -138,11 +138,13 @@
     /* modo mostrar inteira sem cortar (ativado via JS: .show-full) */
     .carousel-item.show-full{z-index:5}
     .carousel-item.show-full img{object-fit:contain; transform:scale(1.02); position:relative; z-index:6; background:#000;}
-    .carousel .arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.55);color:#fff;border:0;border-radius:50%;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);touch-action:manipulation}
+    .carousel .arrow{position:absolute;top:50%;transform:translateY(-50%);border:0;border-radius:999px;width:52px;height:52px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);touch-action:manipulation;z-index:3;
+      background:linear-gradient(180deg, #f4e6a6, #d4af37); color:#2b2b2b; font-weight:900; font-size:28px;}
+    .carousel .arrow:hover{filter:brightness(1.05)}
     .carousel .prev{left:-6px}
     .carousel .next{right:-6px}
     .dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
-    .dot{width:8px;height:8px;border-radius:50%;background:#555}
+    .dot{width:10px;height:10px;border-radius:50%;background:#666;box-shadow:0 0 0 1px rgba(212,175,55,.35) inset}
     .dot.active{background:var(--gold)}
     @media (min-width:980px){ .carousel-item{flex-basis:32%;max-width:32%} }
 
@@ -335,6 +337,12 @@
     </div>
   </section>
 
+  <!-- LIGHTBOX (overlay para imagens grandes) -->
+  <div id="lightbox" aria-hidden="true" style="position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:2000;">
+    <img id="lightbox-img" src="" alt="" style="max-width:96vw;max-height:92vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+    <button id="lightbox-close" aria-label="Fechar" style="position:absolute;top:16px;right:16px;width:44px;height:44px;border:0;border-radius:999px;background:linear-gradient(180deg,#f4e6a6,#d4af37);color:#2b2b2b;font-size:22px;font-weight:900;cursor:pointer;box-shadow:var(--shadow)">✕</button>
+  </div>
+
   <!-- DEPOIMENTOS (CARROSSEL) -->
   <section id="depoimentos">
     <div class="wrap">
@@ -475,6 +483,14 @@
       const next  = root.querySelector('.next');
       const dots  = root.querySelector('.dots');
       const items = Array.from(track.children);
+      if(!items.length) return;
+
+      // util para largura da "carta" + gap
+      function cardStep(){
+        const gap = parseFloat(getComputedStyle(track).gap || '12');
+        const w = items[0].getBoundingClientRect().width + (isNaN(gap)?12:gap);
+        return w;
+      }
 
       // dots
       items.forEach((_,i)=>{
@@ -485,36 +501,127 @@
       const dotEls = Array.from(dots.children);
 
       function updateDots(){
-        const w = items[0].offsetWidth + 12;
+        const w = cardStep();
         const i = Math.round(track.scrollLeft / w);
         dotEls.forEach((d,idx)=>d.classList.toggle('active', idx===i));
       }
 
       function scrollByCards(dir=1){
-        const w = items[0].offsetWidth + 12;
-        track.scrollBy({left: dir*w, behavior:'smooth'});
+        track.scrollBy({left: dir*cardStep(), behavior:'smooth'});
+      });
       }
       function scrollToIndex(i){
-        const w = items[0].offsetWidth + 12;
-        track.scrollTo({left: i*w, behavior:'smooth'});
+        track.scrollTo({left: i*cardStep(), behavior:'smooth'});
+      });
       }
 
       prev?.addEventListener('click',()=>scrollByCards(-1));
       next?.addEventListener('click',()=>scrollByCards(+1));
+      // teclas ← →
+      root.addEventListener('keydown', (e)=>{
+        if(e.key==='ArrowLeft') scrollByCards(-1);
+        if(e.key==='ArrowRight') scrollByCards(+1);
+      });
+      root.tabIndex = 0;
       track.addEventListener('scroll', ()=>{ clearTimeout(track._t); track._t=setTimeout(updateDots,80); });
       window.addEventListener('resize', ()=>{ clearTimeout(track._rz); track._rz=setTimeout(updateDots,120); });
       updateDots();
 
-      // Mostrar imagem inteira em hover/toque (para galeria e depoimentos)
-      if(['depo','galeria'].includes(root.dataset.carousel)){
-        items.forEach(item=>{
-          item.addEventListener('mouseenter', ()=> item.classList.add('show-full'));
-          item.addEventListener('mouseleave', ()=> item.classList.remove('show-full'));
-          item.addEventListener('click', ()=>{ item.classList.toggle('show-full'); });
-        });
-      }
+      // Desktop: abrir imagem gigante ao passar o mouse; Mobile: ao tocar/clicar
+      const isTouch = matchMedia('(pointer: coarse)').matches;
+      items.forEach(item=>{
+        const img = item.querySelector('img');
+        const open = ()=> openLightbox(img.src, img.alt);
+        if(isTouch){
+          item.addEventListener('click', open);
+        } else {
+          let hoverTimer;
+          item.addEventListener('mouseenter', ()=>{ hoverTimer = setTimeout(open, 120); });
+          item.addEventListener('mouseleave', ()=>{ clearTimeout(hoverTimer); });
+          item.addEventListener('click', open);
+        }
+      });
+
+      // (lightbox é tratado acima)
     }
-      // Formulário → abre WhatsApp com mensagem preenchida
+
+    // Lightbox global
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img');
+    const lbClose = document.getElementById('lightbox-close');
+    function openLightbox(src, alt){
+      lbImg.src = src; lbImg.alt = alt || '';
+      lb.style.display = 'flex'; lb.setAttribute('aria-hidden','false');
+    }
+    function closeLightbox(){
+      lb.style.display = 'none'; lb.setAttribute('aria-hidden','true'); lbImg.src='';
+    }
+    lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLightbox(); });
+    lbClose.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); });
+
+    // -------- WhatsApp robusto --------
+    function openWhatsAppMessage(text){
+      const encoded = encodeURIComponent(text);
+      const phone = '5514998605741';
+      const urls = [
+        `https://wa.me/${phone}?text=${encoded}`,
+        `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`,
+      ];
+      // tentativa 1: nova aba
+      const w = window.open(urls[0], '_blank', 'noopener');
+      if(!w){ // bloqueado por popup → redireciona mesma aba
+        window.location.href = urls[0];
+      }
+      // fallback leve após 800ms
+      setTimeout(()=>{
+        if(document.visibilityState === 'visible'){
+          window.location.href = urls[1];
+        }
+      }, 800);
+    }
+
+    // Formulário → abre WhatsApp com mensagem preenchida
+    (function(){
+      const f = document.getElementById('form-orcamento');
+      if(!f) return;
+      f.addEventListener('submit', function(e){
+        e.preventDefault();
+        const nome = (f.nome?.value || '').trim();
+        const cidade = (f.cidade?.value || '').trim();
+        const contato = (f.contato?.value || '').trim();
+        const tipo = (f.tipo?.value || '').trim();
+        const medidas = (f.medidas?.value || '').trim();
+        const prazo = (f.prazo?.value || '').trim();
+        const orcPrev = (f.orcamentoPrevisto?.value || '').trim();
+        const msgLivre = (f.mensagem?.value || '').trim();
+
+        if(!nome || !cidade || !contato || !tipo){
+          alert('Por favor, preencha Nome, Cidade, Telefone/WhatsApp e Tipo de projeto.');
+          return;
+        }
+
+        const texto = [
+          'Oi Júlio, tudo bem? Quero um orçamento.',
+          `• Nome: ${nome}`,
+          `• Cidade: ${cidade}`,
+          `• Contato: ${contato}`,
+          `• Projeto: ${tipo}`,
+          medidas ? `• Medidas: ${medidas}` : null,
+          prazo ? `• Prazo: ${prazo}` : null,
+          orcPrev ? `• Orçamento previsto: ${orcPrev}` : null,
+          msgLivre ? `• Detalhes: ${msgLivre}` : null,
+          '',
+          'Enviado pelo site conceptporcelain.com.br'
+        ].filter(Boolean).join('
+');
+
+        openWhatsAppMessage(texto);
+      });
+    })();
+  </script>
+</body>
+</html>      // Formulário → abre WhatsApp com mensagem preenchida
     (function(){
       const f = document.getElementById('form-orcamento');
       if(!f) return;
