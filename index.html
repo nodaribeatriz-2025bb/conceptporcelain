@@ -23,7 +23,7 @@
   <link rel="apple-touch-icon" href="/logo.png">
   <meta name="theme-color" content="#0f0f10" />
 
-  <!-- Sitemap (mantenha o arquivo em /sitemap.xml) -->
+  <!-- Sitemap -->
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 
   <!-- JSON-LD LocalBusiness -->
@@ -49,17 +49,23 @@
     :root{
       --bg:#0f0f10; --card:#151518; --text:#f5f7f9; --muted:#cfd3d7; --gold:#d4af37;
       --wa:#009739; --ig:#1877F2; --radius:14px; --container:1180px; --shadow:0 10px 24px rgba(0,0,0,.25);
+      --overlay: rgba(15,15,16,.82); /* overlay mais escuro p/ leitura (imagem bem transparente) */
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
-    a{color:inherit}
-
-    /* Rolagem suave e compensação do header em âncoras */
     html{scroll-behavior:smooth}
     :target{scroll-margin-top:86px}
 
-    /* HEADER FIXO */
-    header.site{position:sticky;top:0;z-index:1000;backdrop-filter: blur(6px);background:rgba(15,15,16,.9);border-bottom:1px solid rgba(255,255,255,.08);}    
+    html,body{margin:0;color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+    /* Fundo global com imagem + overlay escuro para leitura */
+    body{
+      background-image: linear-gradient(var(--overlay), var(--overlay)), url('/fundo1.png');
+      background-size: cover; background-position: center; background-attachment: fixed; background-repeat:no-repeat;
+      background-color: var(--bg); /* fallback */
+    }
+    a{color:inherit}
+
+    /* HEADER FIXO (sem fundo de imagem) */
+    header.site{position:sticky;top:0;z-index:1000;background:#0f0f10;border-bottom:1px solid rgba(255,255,255,.08);}    
     .wrap{max-width:var(--container);margin:0 auto;padding:0 20px;}
     .row{display:flex;align-items:center;gap:24px;}
     .brand img{height:4cm;width:auto;display:block;}
@@ -96,7 +102,7 @@
     .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
     .btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
     .btn.wa{background:var(--wa)}
-    .btn.wa:hover{background:#128C7E;}  /* hover WhatsApp oficial mais escuro */
+    .btn.wa:hover{background:#128C7E;}
     .btn.ig{background:var(--ig)}
     @media (max-width:560px){ .btns .btn{width:100%;min-width:auto} }
 
@@ -122,7 +128,7 @@
 
     /* CARROSSEL (galeria & depoimentos) */
     .carousel{position:relative}
-    .carousel-viewport{overflow:hidden;border-radius:12px}
+    .carousel-viewport{overflow:hidden;border-radius:12px;position:relative}
     .carousel-track{display:flex;gap:12px;scroll-behavior:smooth;scroll-snap-type:x mandatory;overflow-x:auto;padding-bottom:6px}
     .carousel-track::-webkit-scrollbar{height:8px}
     .carousel-track::-webkit-scrollbar-thumb{background:#333;border-radius:10px}
@@ -133,14 +139,10 @@
       transition:transform .25s ease, opacity .2s ease;
       background:#000; display:block;
     }
-    /* hover: cresce um pouco (cortada) */
     .carousel-item:hover img{transform:scale(1.06)}
-    /* modo mostrar inteira sem cortar (ativado via JS: .show-full) */
-    .carousel-item.show-full{z-index:5}
-    .carousel-item.show-full img{object-fit:contain; transform:scale(1.02); position:relative; z-index:6; background:#000;}
-    .carousel .arrow{position:absolute;top:50%;transform:translateY(-50%);border:0;border-radius:999px;width:52px;height:52px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);touch-action:manipulation;z-index:3;
-      background:linear-gradient(180deg, #f4e6a6, #d4af37); color:#2b2b2b; font-weight:900; font-size:28px;}
-    .carousel .arrow:hover{filter:brightness(1.05)}
+    .carousel .arrow{position:absolute;top:50%;transform:translateY(-50%);border:0;border-radius:999px;width:56px;height:56px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);touch-action:manipulation;z-index:10;
+      background:linear-gradient(180deg, #f7eec2, #d4af37); color:#2b2b2b; font-weight:900; font-size:30px;}
+    .carousel .arrow:hover{filter:brightness(1.06)}
     .carousel .prev{left:-6px}
     .carousel .next{right:-6px}
     .dots{display:flex;gap:6px;justify-content:center;margin-top:10px}
@@ -187,7 +189,6 @@
       .brand img{height:2.2cm}
     }
 
-    /* Imagens globais responsivas e dimensões explícitas ajudam a evitar CLS */
     img{max-width:100%;height:auto}
   </style>
 </head>
@@ -218,7 +219,7 @@
   </header>
   <div class="spacer"></div>
 
-  <!-- HERO (texto novo + título dourado) -->
+  <!-- HERO -->
   <section id="top" class="hero">
     <div class="wrap">
       <div class="cols">
@@ -458,145 +459,137 @@
     <span class="text">Falar no WhatsApp</span>
   </a>
 
-  <!-- JS: menu hambúrguer + carrosséis + mostrar inteira (galeria e depoimentos) -->
+  <!-- JS: menu hambúrguer + carrosséis + lightbox + WhatsApp form -->
   <script>
-    // Menu hambúrguer
-    (function(){
+    // ===== Menu hambúrguer =====
+    (function () {
       const burger = document.querySelector('.burger');
       const nav = document.getElementById('menu');
-      if(burger && nav){
-        burger.addEventListener('click', ()=>{
-          const opened = nav.classList.toggle('open');
-          burger.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      if (!burger || !nav) return;
+      burger.addEventListener('click', () => {
+        const opened = nav.classList.toggle('open');
+        burger.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      });
+      nav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          nav.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
         });
-        nav.querySelectorAll('a').forEach(a=>{
-          a.addEventListener('click', ()=>{ nav.classList.remove('open'); burger.setAttribute('aria-expanded','false'); });
-        });
-      }
+      });
     })();
 
-    // Carrosséis
+    // ===== Carrosséis (Galeria e Depoimentos) =====
     document.querySelectorAll('.carousel').forEach(initCarousel);
-    function initCarousel(root){
+
+    function initCarousel(root) {
       const track = root.querySelector('.carousel-track');
-      const prev  = root.querySelector('.prev');
-      const next  = root.querySelector('.next');
-      const dots  = root.querySelector('.dots');
+      const prev = root.querySelector('.prev');
+      const next = root.querySelector('.next');
+      const dots = root.querySelector('.dots');
+      if (!track) return;
+
       const items = Array.from(track.children);
-      if(!items.length) return;
+      if (!items.length) return;
 
-      // util para largura da "carta" + gap
-      function cardStep(){
-        const gap = parseFloat(getComputedStyle(track).gap || '12');
-        const w = items[0].getBoundingClientRect().width + (isNaN(gap)?12:gap);
-        return w;
+      // Dots
+      if (dots && !dots.children.length) {
+        items.forEach((_, i) => {
+          const b = document.createElement('span');
+          b.className = 'dot' + (i === 0 ? ' active' : '');
+          b.addEventListener('click', () => scrollToIndex(i));
+          dots.appendChild(b);
+        });
+      }
+      const dotEls = dots ? Array.from(dots.children) : [];
+
+      // Passo do card (largura + gap)
+      function cardStep() {
+        const st = getComputedStyle(track);
+        const gap = parseFloat(st.columnGap || st.gap || '12') || 12;
+        return items[0].getBoundingClientRect().width + gap;
       }
 
-      // dots
-      items.forEach((_,i)=>{
-        const b=document.createElement('span');
-        b.className='dot'+(i===0?' active':''); dots.appendChild(b);
-        b.addEventListener('click',()=>scrollToIndex(i));
-      });
-      const dotEls = Array.from(dots.children);
-
-      function updateDots(){
-        const w = cardStep();
-        const i = Math.round(track.scrollLeft / w);
-        dotEls.forEach((d,idx)=>d.classList.toggle('active', idx===i));
+      function updateDots() {
+        if (!dotEls.length) return;
+        const i = Math.round(track.scrollLeft / cardStep());
+        dotEls.forEach((d, idx) => d.classList.toggle('active', idx === i));
       }
 
-      function scrollByCards(dir=1){
-        track.scrollBy({left: dir*cardStep(), behavior:'smooth'});
-      });
+      function scrollByCards(dir) {
+        track.scrollBy({ left: dir * cardStep(), behavior: 'smooth' });
       }
-      function scrollToIndex(i){
-        track.scrollTo({left: i*cardStep(), behavior:'smooth'});
-      });
+      function scrollToIndex(i) {
+        track.scrollTo({ left: i * cardStep(), behavior: 'smooth' });
       }
 
-      prev?.addEventListener('click',()=>scrollByCards(-1));
-      next?.addEventListener('click',()=>scrollByCards(+1));
-      // teclas ← →
-      root.addEventListener('keydown', (e)=>{
-        if(e.key==='ArrowLeft') scrollByCards(-1);
-        if(e.key==='ArrowRight') scrollByCards(+1);
+      prev && prev.addEventListener('click', () => scrollByCards(-1));
+      next && next.addEventListener('click', () => scrollByCards(+1));
+      root.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') scrollByCards(-1);
+        if (e.key === 'ArrowRight') scrollByCards(+1);
       });
       root.tabIndex = 0;
-      track.addEventListener('scroll', ()=>{ clearTimeout(track._t); track._t=setTimeout(updateDots,80); });
-      window.addEventListener('resize', ()=>{ clearTimeout(track._rz); track._rz=setTimeout(updateDots,120); });
+
+      track.addEventListener('scroll', () => {
+        clearTimeout(track._t);
+        track._t = setTimeout(updateDots, 80);
+      });
+      window.addEventListener('resize', () => {
+        clearTimeout(track._rz);
+        track._rz = setTimeout(updateDots, 120);
+      });
       updateDots();
 
-      // Desktop: abrir imagem gigante ao passar o mouse; Mobile: ao tocar/clicar
+      // Lightbox ao hover/click
       const isTouch = matchMedia('(pointer: coarse)').matches;
-      items.forEach(item=>{
+      items.forEach((item) => {
         const img = item.querySelector('img');
-        const open = ()=> openLightbox(img.src, img.alt);
-        if(isTouch){
+        if (!img) return;
+        const open = () => openLightbox(img.currentSrc || img.src, img.alt);
+        if (isTouch) {
           item.addEventListener('click', open);
         } else {
-          let hoverTimer;
-          item.addEventListener('mouseenter', ()=>{ hoverTimer = setTimeout(open, 120); });
-          item.addEventListener('mouseleave', ()=>{ clearTimeout(hoverTimer); });
+          let t;
+          item.addEventListener('mouseenter', () => { t = setTimeout(open, 80); });
+          item.addEventListener('mouseleave', () => { clearTimeout(t); });
           item.addEventListener('click', open);
         }
       });
-
-      // (lightbox é tratado acima)
     }
 
-    // Lightbox global
+    // ===== Lightbox =====
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lightbox-img');
     const lbClose = document.getElementById('lightbox-close');
-    function openLightbox(src, alt){
+
+    function openLightbox(src, alt) {
+      if (!lb || !lbImg) return;
       lbImg.src = src; lbImg.alt = alt || '';
-      lb.style.display = 'flex'; lb.setAttribute('aria-hidden','false');
+      lb.style.display = 'flex';
+      lb.setAttribute('aria-hidden', 'false');
     }
-    function closeLightbox(){
-      lb.style.display = 'none'; lb.setAttribute('aria-hidden','true'); lbImg.src='';
+    function closeLightbox() {
+      if (!lb || !lbImg) return;
+      lb.style.display = 'none';
+      lb.setAttribute('aria-hidden', 'true');
+      lbImg.src = '';
     }
-    lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLightbox(); });
-    lbClose.addEventListener('click', closeLightbox);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); });
+    lb && lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+    lbClose && lbClose.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
-    // -------- WhatsApp robusto --------
-    function openWhatsAppMessage(text){
-      const encoded = encodeURIComponent(text);
-      const phone = '5514998605741';
-      const urls = [
-        `https://wa.me/${phone}?text=${encoded}`,
-        `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`,
-      ];
-      // tentativa 1: nova aba
-      const w = window.open(urls[0], '_blank', 'noopener');
-      if(!w){ // bloqueado por popup → redireciona mesma aba
-        window.location.href = urls[0];
-      }
-      // fallback leve após 800ms
-      setTimeout(()=>{
-        if(document.visibilityState === 'visible'){
-          window.location.href = urls[1];
-        }
-      }, 800);
-    }
-
-    // Formulário → abre WhatsApp com mensagem preenchida
-    (function(){
+    // ===== Formulário → WhatsApp do Júlio =====
+    (function () {
       const f = document.getElementById('form-orcamento');
-      if(!f) return;
-      f.addEventListener('submit', function(e){
+      if (!f) return;
+      f.addEventListener('submit', function (e) {
         e.preventDefault();
-        const nome = (f.nome?.value || '').trim();
-        const cidade = (f.cidade?.value || '').trim();
-        const contato = (f.contato?.value || '').trim();
-        const tipo = (f.tipo?.value || '').trim();
-        const medidas = (f.medidas?.value || '').trim();
-        const prazo = (f.prazo?.value || '').trim();
-        const orcPrev = (f.orcamentoPrevisto?.value || '').trim();
-        const msgLivre = (f.mensagem?.value || '').trim();
+        const v = (id) => (f[id]?.value || '').trim();
+        const nome = v('nome'), cidade = v('cidade'), contato = v('contato'),
+              tipo = v('tipo'), medidas = v('medidas'), prazo = v('prazo'),
+              orcPrev = v('orcamentoPrevisto'), msgLivre = v('mensagem');
 
-        if(!nome || !cidade || !contato || !tipo){
+        if (!nome || !cidade || !contato || !tipo) {
           alert('Por favor, preencha Nome, Cidade, Telefone/WhatsApp e Tipo de projeto.');
           return;
         }
@@ -616,49 +609,15 @@
         ].filter(Boolean).join('
 ');
 
-        openWhatsAppMessage(texto);
-      });
-    })();
-  </script>
-</body>
-</html>      // Formulário → abre WhatsApp com mensagem preenchida
-    (function(){
-      const f = document.getElementById('form-orcamento');
-      if(!f) return;
-      f.addEventListener('submit', function(e){
-        e.preventDefault();
-        const nome = (f.nome?.value || '').trim();
-        const cidade = (f.cidade?.value || '').trim();
-        const contato = (f.contato?.value || '').trim();
-        const tipo = (f.tipo?.value || '').trim();
-        const medidas = (f.medidas?.value || '').trim();
-        const prazo = (f.prazo?.value || '').trim();
-        const orcPrev = (f.orcamentoPrevisto?.value || '').trim();
-        const msgLivre = (f.mensagem?.value || '').trim();
+        const phone = '5514998605741';
+        const url1 = `https://wa.me/${phone}?text=${encodeURIComponent(texto)}`;
+        const url2 = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(texto)}`;
 
-        // Validação simples
-        if(!nome || !cidade || !contato || !tipo){
-          alert('Por favor, preencha Nome, Cidade, Telefone/WhatsApp e Tipo de projeto.');
-          return;
-        }
-
-        const texto = [
-          `Oi Júlio, tudo bem? Quero um orçamento.`,
-          `• Nome: ${nome}`,
-          `• Cidade: ${cidade}`,
-          `• Contato: ${contato}`,
-          `• Projeto: ${tipo}`,
-          medidas ? `• Medidas: ${medidas}` : null,
-          prazo ? `• Prazo: ${prazo}` : null,
-          orcPrev ? `• Orçamento previsto: ${orcPrev}` : null,
-          msgLivre ? `• Detalhes: ${msgLivre}` : null,
-          '',
-          'Enviado pelo site conceptporcelain.com.br'
-        ].filter(Boolean).join('
-');
-
-        const url = 'https://wa.me/5514998605741?text=' + encodeURIComponent(texto);
-        window.open(url, '_blank', 'noopener');
+        // Redireciono na MESMA aba (funciona mesmo com bloqueio de pop-up)
+        window.location.href = url1;
+        setTimeout(() => {
+          if (document.visibilityState === 'visible') window.location.href = url2;
+        }, 900);
       });
     })();
   </script>
